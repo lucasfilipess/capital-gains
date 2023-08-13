@@ -1,5 +1,5 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/typescript-node",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:0-18",
   "userEnvProbe": "interactiveShell",
   "customizations": {
     "vscode": {
@@ -11,7 +11,6 @@
         "esbenp.prettier-vscode",
         "miguelsolorio.fluent-icons",
         "miguelsolorio.symbols",
-        "MS-CEINTL.vscode-language-pack-pt-BR",
         "oderwat.indent-rainbow",
         "rocketseat.theme-omni",
         "steoates.autoimport",
