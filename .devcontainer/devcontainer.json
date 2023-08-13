@@ -1,0 +1,31 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/typescript-node",
+  "userEnvProbe": "interactiveShell",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "christian-kohler.path-intellisense",
+        "dbaeumer.vscode-eslint",
+        "eamodio.gitlens",
+        "EditorConfig.EditorConfig",
+        "esbenp.prettier-vscode",
+        "miguelsolorio.fluent-icons",
+        "miguelsolorio.symbols",
+        "MS-CEINTL.vscode-language-pack-pt-BR",
+        "oderwat.indent-rainbow",
+        "rocketseat.theme-omni",
+        "steoates.autoimport",
+        "streetsidesoftware.code-spell-checker",
+        "wayou.vscode-todo-highlight",
+        "wmaurer.change-case",
+        "yzhang.markdown-all-in-one",
+        "usernamehw.errorlens",
+        "volkerdobler.insertnums"
+      ]
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker": {}
+  },
+  "postCreateCommand": "npm install"
+}
