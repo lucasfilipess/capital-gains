@@ -3,8 +3,3 @@ export interface IOperation {
   "unit-cost": number;
   quantity: number;
 }
-
-export interface IOperationParams {
-  "unit-cost": number;
-  quantity: number;
-}

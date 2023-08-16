@@ -1,15 +1,13 @@
 import assert from "node:assert";
 import { test } from "node:test";
 
-import { OperationStore } from "@/store";
-
-import BuyController from "../controllers/buy-controller";
+import { BuyController, OperationStoreController } from "@/controllers";
 
 test("buy operation", () => {
-  const operationStore = new OperationStore();
-  const buyController = new BuyController(operationStore);
+  const operationStoreController = new OperationStoreController();
+  const buyController = new BuyController(operationStoreController);
 
-  const operations = [
+  const inputLines = [
     {
       operation: "buy",
       "unit-cost": 10.0,
@@ -22,13 +20,13 @@ test("buy operation", () => {
     },
   ];
 
-  operations.forEach(({ operation, ...rest }) => {
+  inputLines.forEach(({ operation, ...rest }) => {
     if (operation === "buy") {
       const result = buyController.execute(rest);
       assert.equal(JSON.stringify(result), JSON.stringify({ tax: 0 }));
     }
   });
 
-  assert.equal(operationStore.weightedAveragePrice, 12.5);
-  assert.equal(operationStore.numberOfShares, 100 * 1000);
+  assert.equal(operationStoreController.weightedAveragePrice, 12.5);
+  assert.equal(operationStoreController.totalQuantityOfShares, 100 * 1000);
 });

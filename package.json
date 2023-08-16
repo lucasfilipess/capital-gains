@@ -3,11 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/main.ts",
-  "type": "module",
   "scripts": {
-    "start": "tsx src/main.ts",
-    "dev": "tsx watch src/main.ts",
-    "test": "node --loader tsx --test --no-warnings --test-reporter spec src/test/index.test.ts"
+    "start": "tsc && tsc-alias && node dist/main.js",
+    "dev": "tsx src/main.ts",
+    "test": "node --loader tsx --test --no-warnings --test-reporter spec src/test/index.test.ts",
+    "build": "tsc && tsc-alias",
+    "clear": "rm -rf dist"
+
   },
   "keywords": [],
   "author": "",
@@ -15,9 +17,9 @@
   "devDependencies": {
     "@rocketseat/eslint-config": "^2.1.0",
     "@types/node": "^20.4.9",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
+    "tsc-alias": "^1.8.7",
     "tsx": "^3.12.7",
-    "typescript": "^5.1.6",
-    "eslint-plugin-simple-import-sort": "^10.0.0"
+    "typescript": "^5.1.6"
   }
- 
 }

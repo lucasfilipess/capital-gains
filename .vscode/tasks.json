@@ -1,0 +1,42 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "start",
+      "problemMatcher": [],
+      "label": "npm: start",
+      "detail": "tsc && tsc-alias && node dist/main.js"
+    },
+    {
+      "type": "npm",
+      "script": "dev",
+      "problemMatcher": [],
+      "label": "npm: dev",
+      "detail": "tsx src/main.ts"
+    },
+    {
+      "type": "npm",
+      "script": "test",
+      "group": "test",
+      "problemMatcher": [],
+      "label": "npm: test",
+      "detail": "node --loader tsx --test --no-warnings --test-reporter spec src/test/index.test.ts"
+    },
+    {
+      "type": "npm",
+      "script": "build",
+      "group": "build",
+      "problemMatcher": [],
+      "label": "npm: build",
+      "detail": "tsc && tsc-alias"
+    },
+    {
+      "type": "npm",
+      "script": "clear",
+      "problemMatcher": [],
+      "label": "npm: clear",
+      "detail": "rm -rf dist"
+    }
+  ]
+}

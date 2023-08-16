@@ -12,7 +12,7 @@ test("sell operation", () => {
   const sellController = new SellController(operationStore);
   const buyController = new BuyController(operationStore);
 
-  const operations = [
+  const inputLines = [
     { operation: "buy", "unit-cost": 10.0, quantity: 10000 },
     { operation: "sell", "unit-cost": 2.0, quantity: 5000 },
     { operation: "sell", "unit-cost": 20.0, quantity: 2000 },
@@ -20,7 +20,7 @@ test("sell operation", () => {
     { operation: "sell", "unit-cost": 25.0, quantity: 1000 },
   ];
 
-  const answer = [
+  const expectedOutput = [
     { tax: 0.0 },
     { tax: 0.0 },
     { tax: 0.0 },
@@ -30,7 +30,7 @@ test("sell operation", () => {
 
   const operationResult: ITax[] = [];
 
-  operations.forEach(({ operation, ...rest }) => {
+  inputLines.forEach(({ operation, ...rest }) => {
     if (operation === "buy") {
       const result = buyController.execute(rest);
       operationResult.push(result);
@@ -40,5 +40,5 @@ test("sell operation", () => {
     }
   });
 
-  assert.equal(JSON.stringify(answer), JSON.stringify(operationResult));
+  assert.equal(JSON.stringify(expectedOutput), JSON.stringify(operationResult));
 });
