@@ -8,8 +8,10 @@
     "dev": "tsx src/main.ts",
     "test": "node --loader tsx --test --no-warnings --test-reporter spec src/test/index.test.ts",
     "build": "tsc && tsc-alias",
-    "clear": "rm -rf dist"
-
+    "clear": "rm -rf dist",
+    "lint:fix": "eslint ./src --ext .ts --quiet --fix --ignore-path ./.gitignore",
+    "lint:format": "prettier  --loglevel warn --write \"./**/*.{ts,json}\" ",
+    "lint": "npm run lint:format && npm run lint:fix "
   },
   "keywords": [],
   "author": "",
@@ -21,5 +23,8 @@
     "tsc-alias": "^1.8.7",
     "tsx": "^3.12.7",
     "typescript": "^5.1.6"
+  },
+  "engines": {
+    "node": "^18.16.0"
   }
 }

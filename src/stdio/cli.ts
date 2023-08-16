@@ -13,7 +13,6 @@ export default class Cli {
       if (line) {
         const result = callback(line);
         this.readline.write(JSON.stringify(result));
-        this.readline.write("\r");
         this.waitLine(callback);
       } else {
         this.readline.close();
