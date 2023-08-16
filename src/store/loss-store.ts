@@ -4,21 +4,22 @@ interface CalculateLossParams {
   weightedAveragePrice: number;
 }
 
-export interface ILossRepository {
-  getLoss(): number;
-  calculateLoss(params: CalculateLossParams): void;
-  discountLoss(profit: number): void;
+export interface ILossStore {
+  loss: number;
+  calculateLoss(params: CalculateLossParams): number;
+  discountLoss(profit: number): number;
+  clearStore(): void;
 }
 
-export default class LossRepository implements ILossRepository {
-  private loss = 0;
+export default class LossStore implements ILossStore {
+  private _loss = 0;
 
   /**
    * Calculated loss
    * @returns {number}
    */
-  getLoss(): number {
-    return this.loss;
+  get loss(): number {
+    return this._loss;
   }
 
   /**
@@ -31,8 +32,8 @@ export default class LossRepository implements ILossRepository {
     "unit-cost": unitCost,
     weightedAveragePrice,
   }: CalculateLossParams): number {
-    this.loss += weightedAveragePrice * quantity - quantity * unitCost;
-    return this.loss;
+    this._loss += weightedAveragePrice * quantity - quantity * unitCost;
+    return this._loss;
   }
 
   /**
@@ -41,7 +42,15 @@ export default class LossRepository implements ILossRepository {
    * @returns {void} Calculated loss
    */
   discountLoss(profit: number): number {
-    this.loss = Math.max(0, this.loss - profit);
-    return this.loss;
+    this._loss = Math.max(0, this._loss - profit);
+    return this._loss;
+  }
+
+  /**
+   * Reset the store values
+   * @returns {void}
+   */
+  clearStore(): void {
+    this._loss = 0;
   }
 }

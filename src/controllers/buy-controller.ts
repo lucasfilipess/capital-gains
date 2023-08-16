@@ -1,16 +1,30 @@
-import { IOperationParams, IOperationStore, ITax } from "@/types";
+import { ITax } from "@/shared/interfaces";
+import { ISharesStore, IWeightedAveragePriceStore } from "@/store";
+
+interface IBuyControllerParams {
+  "unit-cost": number;
+  quantity: number;
+}
 
 export default class BuyController {
-  constructor(private operationStore: IOperationStore) {}
+  constructor(
+    private sharesStore: ISharesStore,
+    private weightedAveragePriceStore: IWeightedAveragePriceStore,
+  ) {}
 
   /**
    * Execute the buy operation
-   * @param {IOperationParams} params Object containing the number of shares and the unit cost
+   * @param {IBuyControllerParams} params Object containing the number of shares and the unit cost
    * @returns {ITax} Object containing the amount of tax to be paid
    */
-  execute(params: IOperationParams): ITax {
-    this.operationStore.calculateNewWeightedAveragePrice(params);
-    this.operationStore.addNewShares(params.quantity);
+  execute(params: IBuyControllerParams): ITax {
+    const { sharesStore, weightedAveragePriceStore } = this;
+
+    weightedAveragePriceStore.calculateWeightedAveragePrice({
+      ...params,
+      shares: sharesStore.shares,
+    });
+    sharesStore.addShares(params.quantity);
 
     return { tax: 0 };
   }

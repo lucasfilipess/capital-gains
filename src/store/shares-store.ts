@@ -1,18 +1,19 @@
-export interface ISharesRepository {
-  getShares(): number;
-  addNewShares(increase: number): void;
-  removeShares(decrease: number): void;
+export interface ISharesStore {
+  shares: number;
+  addShares(increase: number): number;
+  removeShares(decrease: number): number;
+  clearStore(): void;
 }
 
-export default class SharesRepository implements ISharesRepository {
-  private shares = 0;
+export default class SharesStore implements ISharesStore {
+  private _shares = 0;
 
   /**
    * Total quantity of shares obtained in operations
    * @returns {number}
    */
-  getShares(): number {
-    return this.shares;
+  get shares(): number {
+    return this._shares;
   }
 
   /**
@@ -20,9 +21,9 @@ export default class SharesRepository implements ISharesRepository {
    * @param {number} quantity Number of shares to be increased
    * @returns {number} Total quantity of shares obtained in operations
    */
-  addNewShares(quantity: number): number {
-    this.shares += quantity;
-    return this.shares;
+  addShares(quantity: number): number {
+    this._shares += quantity;
+    return this._shares;
   }
 
   /**
@@ -31,7 +32,15 @@ export default class SharesRepository implements ISharesRepository {
    * @returns {number} Total quantity of shares obtained in operations
    */
   removeShares(quantity: number): number {
-    this.shares -= quantity;
-    return this.shares;
+    this._shares -= quantity;
+    return this._shares;
+  }
+  /**
+   * Reset the store values
+   * @returns {void}
+   */
+
+  clearStore(): void {
+    this._shares = 0;
   }
 }

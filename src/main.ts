@@ -1,15 +1,32 @@
 import { createInterface } from "readline";
 
 import { BuyController, SellController } from "./controllers";
+import { IOperation } from "./shared/interfaces";
 import { Cli } from "./stdio";
-import { OperationStore } from "./store";
-import { IOperation } from "./types";
+import {
+  LossStore,
+  ProfitStore,
+  SharesStore,
+  WeightedAveragePriceStore,
+} from "./store";
 
 class Main {
   init() {
-    const operationStore = new OperationStore();
-    const buyController = new BuyController(operationStore);
-    const sellController = new SellController(operationStore);
+    const lossStore = new LossStore();
+    const profitStore = new ProfitStore();
+    const sharesStore = new SharesStore();
+    const weightedAveragePriceStore = new WeightedAveragePriceStore();
+
+    const buyController = new BuyController(
+      sharesStore,
+      weightedAveragePriceStore,
+    );
+    const sellController = new SellController(
+      sharesStore,
+      weightedAveragePriceStore,
+      lossStore,
+      profitStore,
+    );
     const cli = new Cli(
       createInterface({ input: process.stdin, output: process.stdout }),
     );
@@ -20,7 +37,11 @@ class Main {
         if (operation === "buy") return buyController.execute(rest);
         return sellController.execute(rest);
       });
-      operationStore.clearStore();
+
+      lossStore.clearStore();
+      profitStore.clearStore();
+      sharesStore.clearStore();
+      weightedAveragePriceStore.clearStore();
       return tax;
     });
   }

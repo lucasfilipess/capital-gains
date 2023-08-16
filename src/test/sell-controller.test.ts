@@ -1,17 +1,34 @@
 import assert from "node:assert";
 import { test } from "node:test";
 
-import { OperationStore } from "@/store";
-import { ITax } from "@/types";
+import { ITax } from "@/shared/interfaces";
+import {
+  LossStore,
+  ProfitStore,
+  SharesStore,
+  WeightedAveragePriceStore,
+} from "@/store";
 
 import BuyController from "../controllers/buy-controller";
 import SellController from "../controllers/sell-controller";
 
-test("sell operation", () => {
-  const operationStore = new OperationStore();
-  const sellController = new SellController(operationStore);
-  const buyController = new BuyController(operationStore);
+test("Sell operation", () => {
+  const lossStore = new LossStore();
+  const profitStore = new ProfitStore();
+  const sharesStore = new SharesStore();
+  const weightedAveragePriceStore = new WeightedAveragePriceStore();
 
+  const buyController = new BuyController(
+    sharesStore,
+    weightedAveragePriceStore,
+  );
+
+  const sellController = new SellController(
+    sharesStore,
+    weightedAveragePriceStore,
+    lossStore,
+    profitStore,
+  );
   const inputLines = [
     { operation: "buy", "unit-cost": 10.0, quantity: 10000 },
     { operation: "sell", "unit-cost": 2.0, quantity: 5000 },

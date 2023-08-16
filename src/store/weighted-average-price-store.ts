@@ -4,22 +4,23 @@ interface CalculateWeightedAverageParams {
   shares: number;
 }
 
-export interface IWeightedAveragePriceRepository {
-  getWeightedAveragePrice(): number;
-  calculateWeightedAveragePrice(params: CalculateWeightedAverageParams): void;
+export interface IWeightedAveragePriceStore {
+  weightedAveragePrice: number;
+  calculateWeightedAveragePrice(params: CalculateWeightedAverageParams): number;
+  clearStore(): void;
 }
 
-export default class WeightedAveragePriceRepository
-  implements IWeightedAveragePriceRepository
+export default class WeightedAveragePriceStore
+  implements IWeightedAveragePriceStore
 {
-  private weightedAveragePrice = 0;
+  private _weightedAveragePrice = 0;
 
   /**
    * Calculated weighted average price
    * @returns {number}
    */
-  getWeightedAveragePrice(): number {
-    return this.weightedAveragePrice;
+  get weightedAveragePrice(): number {
+    return this._weightedAveragePrice;
   }
 
   /**
@@ -33,13 +34,21 @@ export default class WeightedAveragePriceRepository
     shares,
   }: CalculateWeightedAverageParams): number {
     const totalAmount =
-      shares * this.weightedAveragePrice + quantity * unitCost;
+      shares * this._weightedAveragePrice + quantity * unitCost;
 
     const totalQuantityOfShares = shares + quantity;
 
-    this.weightedAveragePrice = Number(
+    this._weightedAveragePrice = Number(
       (totalAmount / totalQuantityOfShares).toFixed(2),
     );
-    return this.weightedAveragePrice;
+    return this._weightedAveragePrice;
+  }
+
+  /**
+   * Reset the store values
+   * @returns {void}
+   */
+  clearStore(): void {
+    this._weightedAveragePrice = 0;
   }
 }

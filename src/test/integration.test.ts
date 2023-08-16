@@ -1,12 +1,14 @@
 import assert from "node:assert";
 import { test } from "node:test";
 
+import { BuyController, SellController } from "@/controllers";
+import { IOperation, ITax } from "@/shared/interfaces";
 import {
-  BuyController,
-  OperationStoreController,
-  SellController,
-} from "@/controllers";
-import { IOperation, ITax } from "@/types";
+  LossStore,
+  ProfitStore,
+  SharesStore,
+  WeightedAveragePriceStore,
+} from "@/store";
 
 interface IProcessOperation {
   inputLine: IOperation[];
@@ -14,9 +16,21 @@ interface IProcessOperation {
 }
 
 test("Integration test", async (t) => {
-  const operationStore = new OperationStoreController();
-  const buyController = new BuyController(operationStore);
-  const sellController = new SellController(operationStore);
+  const lossStore = new LossStore();
+  const profitStore = new ProfitStore();
+  const sharesStore = new SharesStore();
+  const weightedAveragePriceStore = new WeightedAveragePriceStore();
+
+  const buyController = new BuyController(
+    sharesStore,
+    weightedAveragePriceStore,
+  );
+  const sellController = new SellController(
+    sharesStore,
+    weightedAveragePriceStore,
+    lossStore,
+    profitStore,
+  );
 
   const processOperation = ({
     inputLine,
@@ -26,7 +40,12 @@ test("Integration test", async (t) => {
       if (operation === "buy") return buyController.execute(rest);
       return sellController.execute(rest);
     });
-    operationStore.clearStore();
+
+    lossStore.clearStore();
+    profitStore.clearStore();
+    sharesStore.clearStore();
+    weightedAveragePriceStore.clearStore();
+
     assert.equal(JSON.stringify(expectedOutput), JSON.stringify(result));
   };
 

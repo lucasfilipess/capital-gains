@@ -4,20 +4,21 @@ interface CalculateProfitParams {
   weightedAveragePrice: number;
 }
 
-export interface IProfitRepository {
-  getProfit(): number;
-  calculateProfit(params: CalculateProfitParams): void;
+export interface IProfitStore {
+  profit: number;
+  calculateProfit(params: CalculateProfitParams): number;
+  clearStore(): void;
 }
 
-export default class ProfitRepository implements IProfitRepository {
-  private profit = 0;
+export default class ProfitStore implements IProfitStore {
+  private _profit = 0;
 
   /**
    * Calculated profit
    * @returns {number}
    */
-  getProfit(): number {
-    return this.profit;
+  get profit(): number {
+    return this._profit;
   }
 
   /**
@@ -30,7 +31,15 @@ export default class ProfitRepository implements IProfitRepository {
     "unit-cost": unitCost,
     weightedAveragePrice,
   }: CalculateProfitParams): number {
-    this.profit = quantity * unitCost - quantity * weightedAveragePrice;
-    return this.profit;
+    this._profit = quantity * unitCost - quantity * weightedAveragePrice;
+    return this._profit;
+  }
+
+  /**
+   * Reset the store values
+   * @returns {void}
+   */
+  clearStore(): void {
+    this._profit = 0;
   }
 }

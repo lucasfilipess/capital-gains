@@ -1,11 +1,17 @@
 import assert from "node:assert";
 import { test } from "node:test";
 
-import { BuyController, OperationStoreController } from "@/controllers";
+import { BuyController } from "@/controllers";
+import { SharesStore, WeightedAveragePriceStore } from "@/store";
 
-test("buy operation", () => {
-  const operationStoreController = new OperationStoreController();
-  const buyController = new BuyController(operationStoreController);
+test("Buy operation", () => {
+  const sharesStore = new SharesStore();
+  const weightedAveragePriceStore = new WeightedAveragePriceStore();
+
+  const buyController = new BuyController(
+    sharesStore,
+    weightedAveragePriceStore,
+  );
 
   const inputLines = [
     {
@@ -27,6 +33,6 @@ test("buy operation", () => {
     }
   });
 
-  assert.equal(operationStoreController.weightedAveragePrice, 12.5);
-  assert.equal(operationStoreController.totalQuantityOfShares, 100 * 1000);
+  assert.equal(weightedAveragePriceStore.weightedAveragePrice, 12.5);
+  assert.equal(sharesStore.shares, 100 * 1000);
 });

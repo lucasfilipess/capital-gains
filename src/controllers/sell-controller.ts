@@ -1,50 +1,72 @@
-import { TOTAL_TAX_FREE_TRANSACTION_AMOUNT } from "@/config";
-import { IOperationParams, IOperationStore, ITax } from "@/types";
+import { TAX_PERCENTAGE, TOTAL_TAX_FREE_TRANSACTION_AMOUNT } from "@/config";
+import { ITax } from "@/shared/interfaces";
+import {
+  ILossStore,
+  IProfitStore,
+  ISharesStore,
+  IWeightedAveragePriceStore,
+} from "@/store";
 import { useDecimals } from "@/utils";
 
+interface ISellControllerParams {
+  "unit-cost": number;
+  quantity: number;
+}
+
 export default class SellController {
-  constructor(private operationStore: IOperationStore) {}
+  constructor(
+    private sharesStore: ISharesStore,
+    private weightedAveragePriceStore: IWeightedAveragePriceStore,
+    private lossStore: ILossStore,
+    private profitStore: IProfitStore,
+  ) {}
 
   /**
    * Execute the sell operation
    * @param {IOperationParams} params Object containing the number of shares and the unit cost
    * @returns {ITax} Object containing the amount of tax to be paid
    */
-  execute(params: IOperationParams): ITax {
+  execute(params: ISellControllerParams): ITax {
+    const { sharesStore, weightedAveragePriceStore, lossStore, profitStore } =
+      this;
     const { quantity, "unit-cost": unitCost } = params;
 
     let tax = 0;
 
-    this.operationStore.removeShares(quantity);
+    sharesStore.removeShares(quantity);
 
-    if (unitCost === this.operationStore.weightedAveragePrice) {
+    if (unitCost === weightedAveragePriceStore.weightedAveragePrice) {
       return { tax };
     }
 
-    this.operationStore.calculateProfit(params);
+    profitStore.calculateProfit({
+      ...params,
+      weightedAveragePrice: weightedAveragePriceStore.weightedAveragePrice,
+    });
 
     if (unitCost * quantity <= TOTAL_TAX_FREE_TRANSACTION_AMOUNT) {
-      this.operationStore.discountLoss();
+      lossStore.discountLoss(profitStore.profit);
       return { tax };
     }
 
-    if (this.operationStore.loss > this.operationStore.profit) {
-      this.operationStore.discountLoss();
+    if (lossStore.loss > profitStore.profit) {
+      lossStore.discountLoss(profitStore.profit);
       return { tax };
     }
 
-    if (unitCost < this.operationStore.weightedAveragePrice) {
-      this.operationStore.calculateLoss(params);
+    if (unitCost < weightedAveragePriceStore.weightedAveragePrice) {
+      lossStore.calculateLoss({
+        ...params,
+        weightedAveragePrice: weightedAveragePriceStore.weightedAveragePrice,
+      });
       return { tax };
     }
 
-    if (this.operationStore.loss > 0) {
-      tax = useDecimals(
-        (this.operationStore.profit - this.operationStore.loss) * 0.2,
-      );
-      this.operationStore.discountLoss();
+    if (lossStore.loss > 0) {
+      tax = useDecimals((profitStore.profit - lossStore.loss) * TAX_PERCENTAGE);
+      lossStore.discountLoss(profitStore.profit);
     } else {
-      tax = useDecimals(this.operationStore.profit * 0.2);
+      tax = useDecimals(profitStore.profit * TAX_PERCENTAGE);
     }
 
     return { tax };
