@@ -37,6 +37,21 @@
       "problemMatcher": [],
       "label": "npm: clear",
       "detail": "rm -rf dist"
+    },
+    {
+      "type": "npm",
+      "script": "build:docker",
+      "group": "build",
+      "problemMatcher": [],
+      "label": "npm: build:docker",
+      "detail": "docker build -t capital-gains ."
+    },
+    {
+      "type": "npm",
+      "script": "start:docker",
+      "problemMatcher": [],
+      "label": "npm: start:docker",
+      "detail": "docker run --rm -it capital-gains"
     }
   ]
 }

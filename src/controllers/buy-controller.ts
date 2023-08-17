@@ -18,13 +18,11 @@ export default class BuyController {
    * @returns {ITax} Object containing the amount of tax to be paid
    */
   execute(params: IBuyControllerParams): ITax {
-    const { sharesStore, weightedAveragePriceStore } = this;
-
-    weightedAveragePriceStore.calculateWeightedAveragePrice({
+    this.weightedAveragePriceStore.calculateWeightedAveragePrice({
       ...params,
-      shares: sharesStore.shares,
+      shares: this.sharesStore.shares,
     });
-    sharesStore.addShares(params.quantity);
+    this.sharesStore.addShares(params.quantity);
 
     return { tax: 0 };
   }

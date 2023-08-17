@@ -27,11 +27,12 @@ class Main {
       lossStore,
       profitStore,
     );
+
     const cli = new Cli(
       createInterface({ input: process.stdin, output: process.stdout }),
     );
 
-    cli.waitLine((line) => {
+    const processLine = (line: string) => {
       const operation = JSON.parse(line) as IOperation[];
       const tax = operation.map(({ operation, ...rest }) => {
         if (operation === "buy") return buyController.execute(rest);
@@ -43,7 +44,9 @@ class Main {
       sharesStore.clearStore();
       weightedAveragePriceStore.clearStore();
       return tax;
-    });
+    };
+
+    cli.waitLine(processLine);
   }
 }
 

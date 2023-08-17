@@ -27,46 +27,47 @@ export default class SellController {
    * @returns {ITax} Object containing the amount of tax to be paid
    */
   execute(params: ISellControllerParams): ITax {
-    const { sharesStore, weightedAveragePriceStore, lossStore, profitStore } =
-      this;
     const { quantity, "unit-cost": unitCost } = params;
 
     let tax = 0;
 
-    sharesStore.removeShares(quantity);
+    this.sharesStore.removeShares(quantity);
 
-    if (unitCost === weightedAveragePriceStore.weightedAveragePrice) {
+    if (unitCost === this.weightedAveragePriceStore.weightedAveragePrice) {
       return { tax };
     }
 
-    profitStore.calculateProfit({
+    this.profitStore.calculateProfit({
       ...params,
-      weightedAveragePrice: weightedAveragePriceStore.weightedAveragePrice,
+      weightedAveragePrice: this.weightedAveragePriceStore.weightedAveragePrice,
     });
 
     if (unitCost * quantity <= TOTAL_TAX_FREE_TRANSACTION_AMOUNT) {
-      lossStore.discountLoss(profitStore.profit);
+      this.lossStore.discountLoss(this.profitStore.profit);
       return { tax };
     }
 
-    if (lossStore.loss > profitStore.profit) {
-      lossStore.discountLoss(profitStore.profit);
+    if (this.lossStore.loss > this.profitStore.profit) {
+      this.lossStore.discountLoss(this.profitStore.profit);
       return { tax };
     }
 
-    if (unitCost < weightedAveragePriceStore.weightedAveragePrice) {
-      lossStore.calculateLoss({
+    if (unitCost < this.weightedAveragePriceStore.weightedAveragePrice) {
+      this.lossStore.calculateLoss({
         ...params,
-        weightedAveragePrice: weightedAveragePriceStore.weightedAveragePrice,
+        weightedAveragePrice:
+          this.weightedAveragePriceStore.weightedAveragePrice,
       });
       return { tax };
     }
 
-    if (lossStore.loss > 0) {
-      tax = useDecimals((profitStore.profit - lossStore.loss) * TAX_PERCENTAGE);
-      lossStore.discountLoss(profitStore.profit);
+    if (this.lossStore.loss > 0) {
+      tax = useDecimals(
+        (this.profitStore.profit - this.lossStore.loss) * TAX_PERCENTAGE,
+      );
+      this.lossStore.discountLoss(this.profitStore.profit);
     } else {
-      tax = useDecimals(profitStore.profit * TAX_PERCENTAGE);
+      tax = useDecimals(this.profitStore.profit * TAX_PERCENTAGE);
     }
 
     return { tax };

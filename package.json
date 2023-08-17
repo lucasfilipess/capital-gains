@@ -8,6 +8,8 @@
     "dev": "tsx src/main.ts",
     "test": "node --loader tsx --test --no-warnings --test-reporter spec src/test/index.test.ts",
     "build": "tsc && tsc-alias",
+    "build:docker":"docker build -t capital-gains .",
+    "start:docker":"docker run --rm -it capital-gains",
     "clear": "rm -rf dist",
     "lint:fix": "eslint ./src --ext .ts --quiet --fix --ignore-path ./.gitignore",
     "lint:format": "prettier  --loglevel warn --write \"./**/*.{ts,json}\" ",

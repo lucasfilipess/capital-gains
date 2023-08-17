@@ -9,14 +9,15 @@ export default class Cli {
    * @returns {void}
    */
   waitLine(callback: (line: string) => unknown): void {
-    this.readline.question("", (line) => {
-      if (line) {
-        const result = callback(line);
-        this.readline.write(JSON.stringify(result));
-        this.waitLine(callback);
-      } else {
+    this.readline.on("line", (line) => {
+      if (line === "") {
         this.readline.close();
+      } else {
+        const result = callback(line);
+        process.stdout.write(`${JSON.stringify(result)}\n`);
+        this.readline.prompt();
       }
     });
+    this.readline.prompt();
   }
 }
