@@ -61,14 +61,11 @@ export default class SellController {
       return { tax };
     }
 
-    if (this.lossStore.loss > 0) {
-      tax = useDecimals(
-        (this.profitStore.profit - this.lossStore.loss) * TAX_PERCENTAGE,
-      );
-      this.lossStore.discountLoss(this.profitStore.profit);
-    } else {
-      tax = useDecimals(this.profitStore.profit * TAX_PERCENTAGE);
-    }
+    tax = useDecimals(
+      (this.profitStore.profit - this.lossStore.loss) * TAX_PERCENTAGE,
+    );
+
+    this.lossStore.discountLoss(this.profitStore.profit);
 
     return { tax };
   }
