@@ -24,15 +24,12 @@
       <a href="#getting-started">Getting Started</a>
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
+        <li><a href="#docker">Docker</a></li>
+        <li><a href="#local">Local</a></li>
+        <li><a href="#scripts">Scripts</a></li>
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -54,13 +51,12 @@ For each line of input, it will return a list containing the tax paid for each o
 The project's architecture was designed to be modular and extensible. The idea is to have separate processes that execute the rules by modules, such modules can be added or removed from the process by changing their behavior, also the modules have access to the results of the operations of other modules through a store passed as a parameter by the process.
 
 #### Example:
-````
 The main process receives two processes as a parameter (it can receive more if that's the case) one that will validate the buy rules and another that will validate the sell rules, these two processes in turn, receive modules as a parameter that contain the rules that will calculate the rate, this way the rules are executed and return the calculated tax.
-````
+
 
 With this architecture it is possible to extend the application in more processes and each process in more modules, well defined modules and keep only one business rule.
 
-Folders structure
+### Folders structure
 ```sh
 ├───.devcontainer #Dev container settings
 ├───.vscode #VS Code settings
@@ -95,13 +91,13 @@ Instructions on how to run the application locally and in a Docker container
 
 
 ### Prerequisites
-#### Docker
+#### Docker environment
 
 * [Docker Engine](https://docs.docker.com/engine/install/)
 * [VS Code](https://code.visualstudio.com/) (recommendation)
 
 
-#### Local
+#### Local environment
 
 * [NodeJS LTS](https://nodejs.org/)
 * [VS Code](https://code.visualstudio.com/) (recommendation)
