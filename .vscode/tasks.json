@@ -6,7 +6,7 @@
       "script": "start",
       "problemMatcher": [],
       "label": "npm: start",
-      "detail": "tsc && tsc-alias && node dist/main.js"
+      "detail": "node dist/main.js"
     },
     {
       "type": "npm",

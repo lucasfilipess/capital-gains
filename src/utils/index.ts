@@ -1,1 +1,1 @@
-export { default as useDecimals } from "./useDecimals";
+export { default as useTwoDecimalPlaces } from "./use-two-decimal-places";
