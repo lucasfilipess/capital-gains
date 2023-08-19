@@ -1,1 +1,1 @@
-export { default as Cli } from "./cli";
+export { default as createCli } from "./cli";

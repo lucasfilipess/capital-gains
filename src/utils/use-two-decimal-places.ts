@@ -3,6 +3,6 @@
  * @param {number} value Object containing the number of shares sold and the unit cost
  * @returns {number}
  */
-const useDecimals = (value: number): number => Number(value.toFixed(2));
+const useTwoDecimalPlaces = (value: number): number => Number(value.toFixed(2));
 
-export default useDecimals;
+export default useTwoDecimalPlaces;

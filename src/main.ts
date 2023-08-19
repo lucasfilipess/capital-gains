@@ -1,55 +1,34 @@
 import { createInterface } from "readline";
 
-import { BuyController, SellController } from "./controllers";
-import { IOperation } from "./shared/interfaces";
-import { Cli } from "./stdio";
+import { buyModule } from "@/modules/buy";
 import {
-  LossStore,
-  ProfitStore,
-  SharesStore,
-  WeightedAveragePriceStore,
-} from "./store";
+  lossModule,
+  taxedProfitModule,
+  taxFreeProfitModule,
+  zeroBalanceModule,
+} from "@/modules/sell";
 
-class Main {
-  init() {
-    const lossStore = new LossStore();
-    const profitStore = new ProfitStore();
-    const sharesStore = new SharesStore();
-    const weightedAveragePriceStore = new WeightedAveragePriceStore();
+import {
+  createBuyProcess,
+  createOperationsProcess,
+  createSellProcess,
+} from "./processes";
+import { createCli } from "./stdio";
 
-    const buyController = new BuyController(
-      sharesStore,
-      weightedAveragePriceStore,
-    );
-    const sellController = new SellController(
-      sharesStore,
-      weightedAveragePriceStore,
-      lossStore,
-      profitStore,
-    );
+const main = () => {
+  const { waitLine } = createCli(
+    createInterface({ input: process.stdin, output: process.stdout }),
+  );
+  const buyProcess = createBuyProcess([buyModule]);
+  const sellProcess = createSellProcess([
+    lossModule,
+    taxFreeProfitModule,
+    taxedProfitModule,
+    zeroBalanceModule,
+  ]);
+  const operationsProcess = createOperationsProcess([buyProcess, sellProcess]);
 
-    const cli = new Cli(
-      createInterface({ input: process.stdin, output: process.stdout }),
-    );
+  waitLine(operationsProcess);
+};
 
-    const processLine = (line: string) => {
-      const operation = JSON.parse(line) as IOperation[];
-      const tax = operation.map(({ operation, ...rest }) => {
-        if (operation === "buy") return buyController.execute(rest);
-        return sellController.execute(rest);
-      });
-
-      lossStore.clearStore();
-      profitStore.clearStore();
-      sharesStore.clearStore();
-      weightedAveragePriceStore.clearStore();
-      return tax;
-    };
-
-    cli.waitLine(processLine);
-  }
-}
-
-const main = new Main();
-
-main.init();
+main();
