@@ -1,10 +1,10 @@
 {
   "name": "capital-gains",
   "version": "1.0.0",
-  "description": "",
+  "description": "Calculates the tax to be paid on profits or losses from operations in the financial stock market",
   "main": "src/main.ts",
   "scripts": {
-    "start": "tsc && tsc-alias && node dist/main.js",
+    "start": "node dist/main.js",
     "dev": "tsx src/main.ts",
     "test": "node --loader tsx --test --no-warnings --test-reporter spec src/test/index.test.ts",
     "build": "tsc && tsc-alias",
