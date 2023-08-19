@@ -1,7 +1,4 @@
-import "./buy-controller.test";
-import "./sell-controller.test";
-import "./loss-store.test";
-import "./profit-store.test";
-import "./weighted-average-price-store.test";
-import "./shares-store.test";
+import "./store/index.test";
+import "./modules/buy/index.test";
+import "./modules/sell/index.test";
 import "./integration.test";
