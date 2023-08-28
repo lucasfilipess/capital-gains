@@ -153,7 +153,7 @@ All these scripts are available for execution in local environment and in docker
 
 * Build the application docker image
   ```sh
-  npm build:docker
+  npm run build:docker
   ```
   or
   ```sh
